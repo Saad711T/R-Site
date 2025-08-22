@@ -1,0 +1,14 @@
+project:
+  type: website
+website:
+  title: "Test website with R language"
+  navbar:
+    left:
+      - href: index.qmd
+        text: main
+      - href: about.qmd
+        text: more
+format:
+  html:
+    theme: cosmo
+    css: styles.css

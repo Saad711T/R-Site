@@ -1,0 +1,10 @@
+# R junk
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# OS/Editors
+.DS_Store
+Thumbs.db
+*.Rproj

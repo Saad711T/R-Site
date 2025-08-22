@@ -1,0 +1,60 @@
+---
+title: "Welcome"
+---
+
+## Hello on my site
+This website built by quarto and r language.
+```{r}
+
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2", quiet = TRUE)
+}
+library(ggplot2)
+
+df <- mtcars
+df$cyl  <- factor(df$cyl)  # مثال على تحويل متغير لفئوي
+df$am   <- factor(df$am, labels = c("Auto","Manual"))
+
+fit <- lm(mpg ~ wt + hp + am, data = df)
+
+# مقاييس أداء بسيطة
+pred <- predict(fit, newdata = df)
+res  <- df$mpg - pred
+rmse <- sqrt(mean(res^2))
+r2   <- summary(fit)$r.squared
+
+list(
+  model_summary = summary(fit),
+  RMSE = rmse,
+  R2   = r2
+)
+
+set.seed(42)
+B <- 1000
+boot_stats <- replicate(B, {
+  idx <- sample(seq_len(nrow(df)), replace = TRUE)
+  bfit <- lm(mpg ~ wt + hp + am, data = df[idx, ])
+  c(coef(bfit), R2 = summary(bfit)$r.squared)
+})
+
+boot_stats <- t(boot_stats)
+boot_df <- as.data.frame(boot_stats)
+
+ci <- function(x) quantile(x, c(0.025, 0.975), na.rm = TRUE)
+cis <- sapply(boot_df, ci)
+cis
+
+p <- ggplot(data.frame(actual = df$mpg, pred = pred), aes(x = actual, y = pred)) +
+  geom_point(alpha = 0.75) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2) +
+  labs(
+    title = "Predicted vs Actual MPG (mtcars)",
+    subtitle = sprintf("RMSE = %.2f | R² = %.3f", rmse, r2),
+    x = "Actual MPG", y = "Predicted MPG"
+  )
+print(p)
+
+data.frame(
+  Metric = c("RMSE","R2"),
+  Value  = c(rmse, r2)
+)
