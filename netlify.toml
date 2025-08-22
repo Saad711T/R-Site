@@ -1,6 +1,6 @@
 [build]
   command = "quarto render"
-  publish = "_site"
+  publish = "mysite"
 
 [build.environment]
   R_VERSION = "4.3.3"
