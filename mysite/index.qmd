@@ -2,11 +2,10 @@
 title: "Welcome"
 ---
 
-## Hello on my site
+## Header
 This website built by quarto and r language.
-```{sql}
-SELECT * FROM World
-WHERE Name = '0xSaad'
+```{r}
+print("Hello in my r site")
 ```
 
 ### site
