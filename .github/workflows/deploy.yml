@@ -1,17 +1,13 @@
 name: Build & Deploy Quarto to Netlify
-
 on:
-  push:
-    branches: [main]
+  push: { branches: [main] }
   workflow_dispatch:
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
@@ -28,18 +24,20 @@ jobs:
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
-          version: "latest"
+          version: '1.5.57'
 
       - name: Render site
         run: quarto render mysite
 
+      - name: Setup Node (for Netlify CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Deploy to Netlify
         run: |
           npm -g install netlify-cli
-          netlify deploy --prod \
-            --dir="mysite/_site" \
-            --site="$NETLIFY_SITE_ID" \
-            --auth="$NETLIFY_AUTH_TOKEN"
+          netlify deploy --prod --dir="mysite/_site" --site="$NETLIFY_SITE_ID" --auth="$NETLIFY_AUTH_TOKEN"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
