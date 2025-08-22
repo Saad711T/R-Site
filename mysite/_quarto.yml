@@ -1,5 +1,6 @@
 project:
   type: website
+  output-dir: mysite
 website:
   title: "Test website with R language"
   navbar:
