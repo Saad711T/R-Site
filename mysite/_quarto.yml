@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: mysite
+execute:
+  freeze: auto 
 website:
   title: "Test website with R language"
   navbar:
