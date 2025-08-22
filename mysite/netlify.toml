@@ -4,3 +4,6 @@
 
 [build.environment]
   R_VERSION = "4.3.3"
+
+[[plugins]]
+package = "@quarto/netlify-plugin-quarto"
